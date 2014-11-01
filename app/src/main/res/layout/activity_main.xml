@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.codeepy.staywithme.app.MainActivity">
+
+    <CheckBox android:id="@+id/checkbox_nfc"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/nfc"
+              android:enabled="false"
+              android:layout_marginTop="20dp"
+              android:textSize="26dp"/>
+    <CheckBox android:id="@+id/checkbox_bluetooth"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/bluetooth"
+              android:enabled="false"
+              android:textSize="26dp"/>
+
+    <Button android:id="@+id/register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_button"
+            android:layout_marginTop="30dp"
+            android:padding="20dp"
+            android:layout_gravity="center"
+            android:textSize="30dp"/>
+
+    <TextView
+            android:id="@+id/textView_explanation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/explanation" />
+
+</LinearLayout>
