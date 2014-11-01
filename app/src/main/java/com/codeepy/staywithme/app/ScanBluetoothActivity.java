@@ -11,6 +11,11 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import com.codeepy.staywithme.app.factory.WebServiceFactory;
+import com.codeepy.staywithme.app.factory.WebServicePostFactory;
+import com.codeepy.staywithme.app.factory.WebServiceURLFactory;
+import com.codeepy.staywithme.app.webservice.WebService;
+import com.codeepy.staywithme.app.webservice.YoWebService;
 
 import java.util.ArrayList;
 
@@ -62,6 +67,16 @@ public class ScanBluetoothActivity extends ListActivity {
             bdla.clear();
             bdla.notifyDataSetChanged();
             adapter.startDiscovery();
+
+            /**
+             * Yo part. edit and cut it out whenever necessary
+             */
+            YoWebService yo = new YoWebService();
+            yo.setYo(YoWebService.YO);
+            yo.setUsername("dumbastic");
+            yo.setApi_token(getResources().getString(R.string.yo_api_token));
+            WebServicePostFactory factory = new WebServicePostFactory();
+            factory.execute(yo);
         }
         return super.onOptionsItemSelected(item);
     }
