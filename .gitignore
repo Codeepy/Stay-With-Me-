@@ -52,4 +52,8 @@ proguard/
 
 # Windows
 Thumbs.db
+<<<<<<< HEAD
 desktop.ini
+=======
+desktop.ini
+>>>>>>> 87df2dd390799cdfebbbcd33b6d4fd6127e2f087
