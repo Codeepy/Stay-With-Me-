@@ -12,11 +12,12 @@ import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.codeepy.staywithme.app.R;
+import com.codeepy.staywithme.app.bluetooth.BluetoothObject;
 
 import java.util.ArrayList;
 
 
-public class ScanBluetoothActivity extends ListActivity {
+public class DeviceScanActivity extends ListActivity {
 
     BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
     private BluetoothDeviceListAdapter bdla;
@@ -74,7 +75,7 @@ public class ScanBluetoothActivity extends ListActivity {
         public BluetoothDeviceListAdapter() {
             super();
             this.bluetoothObjects = new ArrayList<BluetoothObject>();
-            mInflator = ScanBluetoothActivity.this.getLayoutInflater();
+            mInflator = DeviceScanActivity.this.getLayoutInflater();
         }
 
         public void addDevice(BluetoothObject device) {

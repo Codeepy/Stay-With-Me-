@@ -35,7 +35,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.codeepy.staywithme.app.R;
-import com.codeepy.staywithme.app.bluetooth.v1.BluetoothObject;
+import com.codeepy.staywithme.app.bluetooth.BluetoothObject;
 
 import java.util.ArrayList;
 

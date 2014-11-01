@@ -1,4 +1,4 @@
-package com.codeepy.staywithme.app.bluetooth.v1;
+package com.codeepy.staywithme.app.bluetooth;
 
 /**
  * Created by dumbastic on 01/11/2014.
