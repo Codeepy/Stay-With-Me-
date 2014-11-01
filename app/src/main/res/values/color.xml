@@ -2,4 +2,6 @@
 <resources>
     <color name="red_off">#c0392b</color>
     <color name="red_clicked">#e74c3c</color>
+    <color name="green_on">#27ae60</color>
+    <color name="green_clicked">#16a085</color>
 </resources>

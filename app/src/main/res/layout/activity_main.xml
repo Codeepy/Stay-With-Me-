@@ -11,23 +11,26 @@
         android:layout_weight="1">
 
         <ImageButton
+            android:id="@+id/btn_nfc"
             android:src="@drawable/ic_nfc"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/button_sensor"/>
+            android:background="@drawable/button_off"/>
         <ImageButton
+            android:id="@+id/btn_bluetooth"
             android:src="@drawable/ic_bluetooth"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/button_sensor"/>
+            android:background="@drawable/button_off"/>
         <ImageButton
+            android:id="@+id/btn_swm"
             android:src="@drawable/ic_stay_with_me"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/button_sensor"/>
+            android:background="@drawable/button_off"/>
         </LinearLayout>
 
     <ListView
