@@ -80,10 +80,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         } else {
             isNfcEnabled = false;
         }
-        else {
-//            ((CheckBox)findViewById(R.id.checkbox_nfc)).setChecked(false);
-//            ((CheckBox)findViewById(R.id.checkbox_nfc)).setText("NFS is disabled");
-        }
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter.isEnabled()) {
@@ -92,26 +88,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         } else {
             isBluetoothEnabled = false;
         }
-        else {
-//            ((CheckBox)findViewById(R.id.checkbox_bluetooth)).setChecked(false);
-//            ((CheckBox)findViewById(R.id.checkbox_bluetooth)).setText("Bluetooth is disabled");
-        }
-
-//        final Button button = (Button) findViewById(R.id.register);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                // Perform action on click
-//                role = MINION;
-//            }
-//        });
-//
-//        button.setOnLongClickListener(new View.OnLongClickListener() {
-//            public boolean onLongClick(View v) {
-//                // Perform action on click
-//                role = BOSS;
-//                return true;
-//            }
-//        });
     }
 
 
