@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,11 +16,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.codeepy.staywithme.app.enums.Codeepy;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener {
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
@@ -48,6 +50,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnSwm = (ImageButton) findViewById(R.id.btn_swm);
 
         btnNfc.setOnClickListener(this);
+        btnBluetooth.setOnClickListener(this);
+        btnSwm.setOnClickListener(this);
+        btnSwm.setOnLongClickListener(this);
     }
 
     /**
@@ -79,6 +84,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             btnNfc.setBackground(getResources().getDrawable(R.drawable.button_on));
         } else {
             isNfcEnabled = false;
+            btnNfc.setBackground(getResources().getDrawable(R.drawable.button_off));
         }
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -87,6 +93,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             btnBluetooth.setBackground(getResources().getDrawable(R.drawable.button_on));
         } else {
             isBluetoothEnabled = false;
+            btnBluetooth.setBackground(getResources().getDrawable(R.drawable.button_off));
         }
     }
 
@@ -104,7 +111,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_bluetooth) {
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -122,10 +129,30 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 if (!isNfcExist) {
                     Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
                 } else {
-                    if (!isNfcEnabled){
-                        startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
-                    }
+                    startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
                 }
+                break;
+            case R.id.btn_bluetooth:
+                startActivity(new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
+                break;
+            case R.id.btn_swm:
+                Log.v(Codeepy.TAG.toString(), "IM SLAVE");
+                btnSwm.setBackground(getResources().getDrawable(R.drawable.button_on));
+                break;
         }
+    }
+
+
+    /**
+     * Called when a view has been clicked and held.
+     *
+     * @param v The view that was clicked and held.
+     * @return true if the callback consumed the long click, false otherwise.
+     */
+    @Override
+    public boolean onLongClick(View v) {
+        Log.v(Codeepy.TAG.toString(), "IM MASTER");
+        btnSwm.setBackground(getResources().getDrawable(R.drawable.button_master));
+        return false;
     }
 }
