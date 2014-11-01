@@ -1,4 +1,4 @@
-package com.codeepy.staywithme.app;
+package com.codeepy.staywithme.app.bluetooth.v1;
 
 /**
  * Created by dumbastic on 01/11/2014.
@@ -6,9 +6,9 @@ package com.codeepy.staywithme.app;
 public class BluetoothObject  {
     private String address;
     private String name;
-    private int rssi;
+    private String rssi;
 
-    public BluetoothObject(String address, String name, int rssi) {
+    public BluetoothObject(String address, String name, String rssi) {
         this.address = address;
         this.name = name;
         this.rssi = rssi;
@@ -30,11 +30,11 @@ public class BluetoothObject  {
         this.address = address;
     }
 
-    public int getRssi() {
+    public String getRssi() {
         return rssi;
     }
 
-    public void setRssi(int rssi) {
+    public void setRssi(String rssi) {
         this.rssi = rssi;
     }
 }

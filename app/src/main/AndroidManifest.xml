@@ -38,9 +38,14 @@
                     android:resource="@xml/nfc_tech_filter" />
         </activity>
         <activity
-            android:name=".ScanBluetoothActivity"
+            android:name=".bluetooth.v1.ScanBluetoothActivity"
             android:label="@string/app_name"
             android:parentActivityName=".MainActivity">
+        </activity>
+        <activity
+                android:name=".bluetooth.v2.DeviceScanActivity"
+                android:label="@string/app_name"
+                android:parentActivityName=".MainActivity">
         </activity>
     </application>
 
