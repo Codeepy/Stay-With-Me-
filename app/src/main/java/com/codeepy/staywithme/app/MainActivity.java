@@ -1,12 +1,14 @@
 package com.codeepy.staywithme.app;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -76,6 +80,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         } else {
             isNfcEnabled = false;
         }
+        else {
+//            ((CheckBox)findViewById(R.id.checkbox_nfc)).setChecked(false);
+//            ((CheckBox)findViewById(R.id.checkbox_nfc)).setText("NFS is disabled");
+        }
 
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter.isEnabled()) {
@@ -84,8 +92,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
         } else {
             isBluetoothEnabled = false;
         }
+        else {
+//            ((CheckBox)findViewById(R.id.checkbox_bluetooth)).setChecked(false);
+//            ((CheckBox)findViewById(R.id.checkbox_bluetooth)).setText("Bluetooth is disabled");
+        }
 
+//        final Button button = (Button) findViewById(R.id.register);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                // Perform action on click
+//                role = MINION;
+//            }
+//        });
+//
+//        button.setOnLongClickListener(new View.OnLongClickListener() {
+//            public boolean onLongClick(View v) {
+//                // Perform action on click
+//                role = BOSS;
+//                return true;
+//            }
+//        });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

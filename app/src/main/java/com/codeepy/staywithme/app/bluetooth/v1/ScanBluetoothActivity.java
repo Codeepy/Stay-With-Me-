@@ -1,23 +1,17 @@
-package com.codeepy.staywithme.app;
+package com.codeepy.staywithme.app.bluetooth.v1;
 
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.codeepy.staywithme.app.factory.WebServiceFactory;
-import com.codeepy.staywithme.app.factory.WebServicePostFactory;
-import com.codeepy.staywithme.app.factory.WebServiceURLFactory;
-import com.codeepy.staywithme.app.webservice.WebService;
-import com.codeepy.staywithme.app.webservice.YoWebService;
+import com.codeepy.staywithme.app.R;
 
 import java.util.ArrayList;
 
@@ -35,7 +29,7 @@ public class ScanBluetoothActivity extends ListActivity {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             String name = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
             int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE) * -1;
-            bdla.addDevice(new BluetoothObject(device.getAddress(), device.getName() == null ? name : device.getName(), rssi));
+            bdla.addDevice(new BluetoothObject(device.getAddress(), device.getName() == null ? name : device.getName(), String.valueOf(rssi)));
             bdla.notifyDataSetChanged();
         }
         }
@@ -65,7 +59,7 @@ public class ScanBluetoothActivity extends ListActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
+        if (id == R.id.menu_refresh) {
             bdla.clear();
             bdla.notifyDataSetChanged();
             adapter.startDiscovery();
@@ -84,9 +78,12 @@ public class ScanBluetoothActivity extends ListActivity {
         }
 
         public void addDevice(BluetoothObject device) {
-            if(!bluetoothObjects.contains(device)) {
-                bluetoothObjects.add(device);
+            for (int i=0; i<bluetoothObjects.size(); i++) {
+                if (bluetoothObjects.get(i).getAddress().equals(device.getAddress())) {
+                    return;
+                }
             }
+            bluetoothObjects.add(device);
         }
 
         public BluetoothObject getDevice(int position) {
