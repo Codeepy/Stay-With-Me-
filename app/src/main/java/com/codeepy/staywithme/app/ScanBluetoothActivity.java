@@ -13,6 +13,11 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import com.codeepy.staywithme.app.factory.WebServiceFactory;
+import com.codeepy.staywithme.app.factory.WebServicePostFactory;
+import com.codeepy.staywithme.app.factory.WebServiceURLFactory;
+import com.codeepy.staywithme.app.webservice.WebService;
+import com.codeepy.staywithme.app.webservice.YoWebService;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -41,24 +46,6 @@ public class ScanBluetoothActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Use this check to determine whether BLE is supported on the device.  Then you can
-        // selectively disable BLE-related features.
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-        }
-
-        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-        // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-
-        // Checks if Bluetooth is supported on the device.
-        if (bluetoothManager.getAdapter() == null) {
-            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
         bdla = new BluetoothDeviceListAdapter();
         setListAdapter(bdla);
 
@@ -84,10 +71,6 @@ public class ScanBluetoothActivity extends ListActivity {
             bdla.notifyDataSetChanged();
             adapter.startDiscovery();
         }
-        else if (id == R.id.action_sort) {
-            bdla.sortDevice();
-            bdla.notifyDataSetChanged();
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -105,28 +88,6 @@ public class ScanBluetoothActivity extends ListActivity {
             if(!bluetoothObjects.contains(device)) {
                 bluetoothObjects.add(device);
             }
-        }
-
-        /* Author: Ruvin */
-        public void sortDevice(){
-            int minnIndex = 0;
-            for (int i = 0; i < bluetoothObjects.size(); i++) {
-                int minn = bluetoothObjects.get(i).getRssi();
-                minnIndex = i;
-                for (int j=i+1; j<bluetoothObjects.size()-1; j++){
-                    if (bluetoothObjects.get(j).getRssi() < minn){
-                        minn = bluetoothObjects.get(j).getRssi();
-                        minnIndex = j;
-                    }
-                }
-                int c =  bluetoothObjects.get(i).getRssi();
-                bluetoothObjects.get(i).setRssi(bluetoothObjects.get(minnIndex).getRssi());
-                bluetoothObjects.get(minnIndex).setRssi(c);
-            }
-
-            int c =  bluetoothObjects.get(bluetoothObjects.size()-1).getRssi();
-            bluetoothObjects.get(bluetoothObjects.size()-1).setRssi(bluetoothObjects.get(minnIndex).getRssi());
-            bluetoothObjects.get(minnIndex).setRssi(c);
         }
 
         public BluetoothObject getDevice(int position) {

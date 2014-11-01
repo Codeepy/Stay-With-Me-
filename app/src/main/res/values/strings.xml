@@ -10,4 +10,6 @@
     <string name="menu_refresh">Refresh</string>
     <string name="menu_sort">Sort</string>
 
+    <string name="yo_api_token">bf4b841a-3f4c-4763-b13c-57cc302d478a</string>
+
 </resources>
