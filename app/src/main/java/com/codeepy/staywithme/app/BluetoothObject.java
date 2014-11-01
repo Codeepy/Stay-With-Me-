@@ -3,7 +3,7 @@ package com.codeepy.staywithme.app;
 /**
  * Created by dumbastic on 01/11/2014.
  */
-public class BluetoothObject {
+public class BluetoothObject  {
     private String address;
     private String name;
     private int rssi;

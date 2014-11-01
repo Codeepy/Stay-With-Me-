@@ -5,4 +5,8 @@
         android:title="@string/menu_refresh"
         android:orderInCategory="100"
         android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_sort"
+          android:title="@string/menu_sort"
+          android:orderInCategory="100"
+          android:showAsAction="ifRoom" />
 </menu>
