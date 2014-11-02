@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.codeepy.staywithme.app.bluetooth.v2.DeviceScanActivity;
 import com.codeepy.staywithme.app.enums.Codeepy;
 
 public class MainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener, IsoDepTransceiver.OnMessageReceived, NfcAdapter.ReaderCallback {
@@ -171,6 +172,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_bluetooth) {
+            Intent intent = new Intent(this, DeviceScanActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
