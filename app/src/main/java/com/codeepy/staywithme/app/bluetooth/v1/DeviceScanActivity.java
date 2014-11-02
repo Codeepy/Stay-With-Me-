@@ -30,7 +30,8 @@ public class DeviceScanActivity extends ListActivity {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             String name = intent.getStringExtra(BluetoothDevice.EXTRA_NAME);
             int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE) * -1;
-            bdla.addDevice(new BluetoothObject(device.getAddress(), device.getName() == null ? name : device.getName(), String.valueOf(rssi)));
+            bdla.addDevice(new BluetoothObject(device.getAddress(), device.getName() == null ? name : device.getName(),
+                    Math.abs(rssi), null));
             bdla.notifyDataSetChanged();
         }
         }
@@ -120,6 +121,8 @@ public class DeviceScanActivity extends ListActivity {
                 viewHolder.deviceAddress = (TextView) view.findViewById(R.id.device_address);
                 viewHolder.deviceName = (TextView) view.findViewById(R.id.device_name);
                 viewHolder.deviceRSSI = (TextView) view.findViewById(R.id.device_rssi);
+                viewHolder.deviceUUID = (TextView) view.findViewById(R.id.device_uuid);
+                viewHolder.deviceDistance = (TextView) view.findViewById(R.id.device_distance);
                 view.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) view.getTag();
@@ -132,7 +135,9 @@ public class DeviceScanActivity extends ListActivity {
             else
                 viewHolder.deviceName.setText(R.string.unknown_device);
             viewHolder.deviceAddress.setText(device.getAddress());
-            viewHolder.deviceRSSI.setText(device.getRssi() + " dB");
+            viewHolder.deviceRSSI.setText(Math.abs(device.getRssi()) + " dB");
+            viewHolder.deviceUUID.setText(device.getScanRecordString(9, 25));
+            viewHolder.deviceDistance.setText(String.valueOf(device.getEstimateDistance()) + " cm");
 
             return view;
         }
@@ -141,6 +146,8 @@ public class DeviceScanActivity extends ListActivity {
             TextView deviceName;
             TextView deviceAddress;
             TextView deviceRSSI;
+            TextView deviceUUID;
+            TextView deviceDistance;
         }
     }
 }
