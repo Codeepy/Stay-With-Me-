@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.nfc.NdefMessage;
-import android.nfc.NfcAdapter;
-import android.nfc.NfcManager;
-import android.nfc.Tag;
+import android.nfc.*;
 import android.nfc.tech.IsoDep;
+import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.codeepy.staywithme.app.bluetooth.v2.DeviceScanActivity;
 import com.codeepy.staywithme.app.enums.Codeepy;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener, IsoDepTransceiver.OnMessageReceived, NfcAdapter.ReaderCallback {
 
@@ -35,7 +36,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private boolean isNfcExist = true;
     private boolean isNfcEnabled;
     private boolean isBluetoothEnabled;
-    private boolean isNfcBroadcast = true;
+    private boolean isNfcBroadcast = false;
 
     private ImageButton btnNfc;
     private ImageButton btnBluetooth;
@@ -200,14 +201,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             case R.id.btn_swm:
                 Log.v(Codeepy.TAG.toString(), "IM SLAVE");
                 btnSwm.setBackground(getResources().getDrawable(R.drawable.button_on));
-                if (!isNfcBroadcast) {
-                    isNfcBroadcast = true;
-                    nfcAdapter.enableReaderMode(this, this, NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
-                            null);
-                } else {
-                    isNfcBroadcast = false;
-                    nfcAdapter.disableReaderMode(this);
-                }
                 break;
         }
     }
@@ -223,6 +216,44 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     public boolean onLongClick(View v) {
         Log.v(Codeepy.TAG.toString(), "IM MASTER");
         btnSwm.setBackground(getResources().getDrawable(R.drawable.button_master));
-        return false;
+        if (!isNfcBroadcast) {
+            isNfcBroadcast = true;
+            nfcAdapter.enableReaderMode(this, this, NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
+                    null);
+        } else {
+            isNfcBroadcast = false;
+            nfcAdapter.disableReaderMode(this);
+        }
+        return true;
+    }
+
+    private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
+
+        //create the message in according with the standard
+        String lang = "en";
+        byte[] textBytes = text.getBytes();
+        byte[] langBytes = lang.getBytes("US-ASCII");
+        int langLength = langBytes.length;
+        int textLength = textBytes.length;
+
+        byte[] payload = new byte[1 + langLength + textLength];
+        payload[0] = (byte) langLength;
+
+        // copy langbytes and textbytes into payload
+        System.arraycopy(langBytes, 0, payload, 1, langLength);
+        System.arraycopy(textBytes, 0, payload, 1 + langLength, textLength);
+
+        NdefRecord recordNFC = new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT, new byte[0], payload);
+        return recordNFC;
+    }
+
+    private void write(String text, Tag tag) throws IOException, FormatException {
+
+        NdefRecord[] records = { createRecord(text) };
+        NdefMessage message = new NdefMessage(records);
+        Ndef ndef = Ndef.get(tag);
+        ndef.connect();
+        ndef.writeNdefMessage(message);
+        ndef.close();
     }
 }
