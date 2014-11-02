@@ -1,27 +1,26 @@
 package com.codeepy.staywithme.app;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcManager;
+import android.nfc.Tag;
+import android.nfc.tech.IsoDep;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.codeepy.staywithme.app.enums.Codeepy;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
-
-public class MainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, View.OnLongClickListener, IsoDepTransceiver.OnMessageReceived, NfcAdapter.ReaderCallback {
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
@@ -35,15 +34,25 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private boolean isNfcExist = true;
     private boolean isNfcEnabled;
     private boolean isBluetoothEnabled;
+    private boolean isNfcBroadcast = true;
 
     private ImageButton btnNfc;
     private ImageButton btnBluetooth;
     private ImageButton btnSwm;
 
+    private NfcAdapter nfcAdapter;
+    private ListView listView;
+    private IsoDepAdapter isoDepAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        listView = (ListView) findViewById(R.id.list);
+        isoDepAdapter = new IsoDepAdapter(getLayoutInflater());
+        listView.setAdapter(isoDepAdapter);
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         btnNfc = (ImageButton) findViewById(R.id.btn_nfc);
         btnBluetooth = (ImageButton) findViewById(R.id.btn_bluetooth);
@@ -98,6 +107,56 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     }
 
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isNfcBroadcast)
+            nfcAdapter.enableReaderMode(this, this, NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
+                    null);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        nfcAdapter.disableReaderMode(this);
+    }
+
+    @Override
+    public void onTagDiscovered(Tag tag) {
+        IsoDep isoDep = IsoDep.get(tag);
+        IsoDepTransceiver transceiver = new IsoDepTransceiver(isoDep, this);
+        Thread thread = new Thread(transceiver);
+        thread.start();
+
+        Log.v(Codeepy.TAG.toString(), byteArrayToHex(tag.getId()) + " " + tag.toString() + " ");
+        for (String tech : tag.getTechList()){
+            Log.v(Codeepy.TAG.toString(), tech);
+        }
+    }
+
+    public static String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for (byte b : a) sb.append(String.format("%02x", b & 0xff));
+        return sb.toString();
+    }
+
+    @Override
+    public void onMessage(final byte[] message) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                isoDepAdapter.addMessage(new String(message));
+            }
+        });
+    }
+
+    @Override
+    public void onError(Exception exception) {
+        onMessage(exception.getMessage().getBytes());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -138,6 +197,14 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             case R.id.btn_swm:
                 Log.v(Codeepy.TAG.toString(), "IM SLAVE");
                 btnSwm.setBackground(getResources().getDrawable(R.drawable.button_on));
+                if (!isNfcBroadcast) {
+                    isNfcBroadcast = true;
+                    nfcAdapter.enableReaderMode(this, this, NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK,
+                            null);
+                } else {
+                    isNfcBroadcast = false;
+                    nfcAdapter.disableReaderMode(this);
+                }
                 break;
         }
     }
